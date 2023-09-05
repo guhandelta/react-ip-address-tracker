@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
 import SearchBar from "./SearchBar"
 import Stats from "./Stats"
+import Map from "./Map";
 
 const IPAddress = () => {
-    const [ ipAddress, setIPAddrss ] = useState('');
+    const [ ipAddress, setIPAddress ] = useState('');
     const [ location, setLocation ] = useState('');
     const [ timezone, setTimezone ] = useState('');
     const [ ISP, setISP ] = useState('');
@@ -14,7 +15,7 @@ const IPAddress = () => {
         .then(res => res.json())
         .then(data => {
             console.log(data)
-            setIPAddrss(data.ip);
+            setIPAddress(data.ip);
             setLocation(`${data.location.city}, ${data.location.country}, ${data.location.postalCode}`)
             setTimezone(`UTC ${data.location.timezone}`)
             setISP(`${data.isp}`);
@@ -23,19 +24,28 @@ const IPAddress = () => {
                 lng: data.location.lng,
             });
         });
+
+        ipAddress && console.log(":\t",ipAddress);
+        location && console.log(":\t",location);
+        timezone && console.log(":\t",timezone);
+        ISP && console.log(":\t",ISP);
     }
 
     useEffect(() => fetchLocation(), []);
 
   return (
     <div className="flex flex-col h-screen relative">
-        <SearchBar />
+        <SearchBar 
+            setIPAddress={setIPAddress}
+            fetchLocation={fetchLocation}
+        />
         <Stats 
             ipAddress={ipAddress}
             location={location}
             timezone={timezone}
             isp={ISP}
         />
+        { ipAddress && location && timezone && ISP && (<Map coordinates={coordinates} /> )}
     </div>
   )
 }

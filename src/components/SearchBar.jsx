@@ -2,12 +2,13 @@
 import { useState } from "react";
 import IconImage from "../images/icon-arrow.svg";
 
-const SearchBar = () => {
+const SearchBar = ({ setIPAddress, fetchLocation }) => {
 
   const [ ipAddress, setIpAddress ] = useState("");
 
   const handleClick = () =>{
-    console.log("Wassup");
+    setIPAddress(ipAddress);
+    fetchLocation(ipAddress);
   }
 
   return (
